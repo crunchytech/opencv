@@ -1,0 +1,36 @@
+name: Build For UB Tracking
+
+on: workflow_dispatch
+
+permissions:
+  contents: read # to fetch code (actions/checkout)
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Get tag name
+        id: get_tag_name
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: "Checkout Project"
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.get_tag_name.outputs.VERSION }}
+      - name: "Configure Build"
+        run: |
+          mkdir build
+          dir
+          ls 
+          cmake -S . -B build -A x64  -DBUILD_SHARED_LIBS=OFF -DWITH_ITT:BOOL="0"  -DBUILD_opencv_java_bindings_generator:BOOL="0"  -DWITH_OPENCL_D3D11_NV:BOOL="0"  -DWITH_IPP:BOOL="0"  -DCLAMDFFT_INCLUDE_DIR:PATH="CLAMDFFT_INCLUDE_DIR-NOTFOUND"  -DWITH_JASPER:BOOL="0"  -DCLAMDBLAS_INCLUDE_DIR:PATH="CLAMDBLAS_INCLUDE_DIR-NOTFOUND"  -DBUILD_opencv_dnn:BOOL="0"  -DBUILD_opencv_photo:BOOL="0"  -DWITH_OPENCLAMDBLAS:BOOL="0"  -DWITH_MSMF:BOOL="0"  -DWITH_VTK:BOOL="0"  -DBUILD_opencv_stitching:BOOL="0"  -DWITH_PROTOBUF:BOOL="0"  -DBUILD_opencv_ts:BOOL="0"  -DWITH_LAPACK:BOOL="0"  -DWITH_OBSENSOR:BOOL="0"  -DBUILD_PERF_TESTS:BOOL="0"  -Dthunder:BOOL="0"  -DBUILD_ZLIB:BOOL="0"  -DWITH_IMGCODEC_HDR:BOOL="0"  -DWITH_GSTREAMER:BOOL="0"  -DWITH_WEBP:BOOL="0"  -Dccitt:BOOL="0"  -DWITH_TIFF:BOOL="0"  -DBUILD_opencv_python_bindings_generator:BOOL="0"  -DOPENCV_DNN_OPENCL:BOOL="0"  -DOPENCV_TEST_DNN_TFLITE:BOOL="0"  -DBUILD_opencv_ml:BOOL="0"  -DINSTALL_PDB:BOOL="0"  -DBUILD_opencv_objdetect:BOOL="0"  -DWITH_ARITH_ENC:BOOL="0"  -DCLAMDFFT_ROOT_DIR:PATH="CLAMDFFT_ROOT_DIR-NOTFOUND"  -DBUILD_opencv_js:BOOL="0"  -DWITH_OPENCLAMDFFT:BOOL="0"  -DWITH_IMGCODEC_PFM:BOOL="0"  -DBUILD_opencv_js_bindings_generator:BOOL="0"  -DBUILD_opencv_python_tests:BOOL="0"  -DBUILD_WEBP:BOOL="0"  -DCV_TRACE:BOOL="0"  -Dpackbits:BOOL="0"  -DWITH_IMGCODEC_PXM:BOOL="0"  -DBUILD_LIST:STRING=""  -DWITH_JPEG:BOOL="0"  -DOPENCV_TIMESTAMP:STRING="2024-03-20T01:36:21Z"  -DBUILD_JPEG:BOOL="0"  -DWITH_ADE:BOOL="0"  -DCMAKE_BUILD_TYPE:STRING="Release"  -DBUILD_PNG:BOOL="0"  -DWITH_EIGEN:BOOL="0"  -DCLAMDBLAS_ROOT_DIR:PATH="CLAMDBLAS_ROOT_DIR-NOTFOUND"  -DWITH_PNG:BOOL="0"  -DWITH_QUIRC:BOOL="0"  -DWITH_WIN32UI:BOOL="1"  -DBUILD_TIFF:BOOL="0"  -DBUILD_JAVA:BOOL="0"  -DWITH_HALIDE:BOOL="0"  -DBUILD_opencv_video:BOOL="0"  -DBUILD_TESTS:BOOL="0"  -DBUILD_opencv_flann:BOOL="0"  -DWITH_FFMPEG:BOOL="0"  -DBUILD_ITT:BOOL="0"  -DWITH_FREETYPE:BOOL="0"  -DBUILD_opencv_features2d:BOOL="0"  -DBUILD_opencv_videoio:BOOL="0"  -DBUILD_opencv_calib3d:BOOL="0"  -DWITH_OPENJPEG:BOOL="0"  -DWITH_ARITH_DEC:BOOL="0"  -DBUILD_opencv_gapi:BOOL="0"  -DWITH_FLATBUFFERS:BOOL="0"  -DBUILD_PROTOBUF:BOOL="0"  -DBUILD_opencv_apps:BOOL="0"  -DBUILD_opencv_objc_bindings_generator:BOOL="0"  -DWITH_OPENEXR:BOOL="0"  -DBUILD_JASPER:BOOL="0"  -DBUILD_OPENJPEG:BOOL="0"  -DWITH_IMGCODEC_SUNRASTER:BOOL="0"  -DWITH_MSMF_DXVA:BOOL="0"
+      - name: "Build OpenCV"
+        run: |
+          cd build
+          cmake --build . --config Release
+          ls
+          7z a lib_${{ steps.get_tag_name.outputs.VERSION }}.zip lib 
+      - name: "Create Release"
+        run: |
+          cd build
+          gh release create ${{ steps.get_tag_name.outputs.VERSION }} lib_${{ steps.get_tag_name.outputs.VERSION }}.zip
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
