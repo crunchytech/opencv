@@ -1,5 +1,8 @@
 name: Build on Windows
-on: push
+on:
+  push:
+   tags:
+     - '*'
 jobs:
   build:
     runs-on: windows-latest
