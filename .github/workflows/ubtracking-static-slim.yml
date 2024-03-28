@@ -2,9 +2,6 @@ name: ubtracking static slim
 
 on: workflow_dispatch
 
-permissions:
-  contents: read # to fetch code (actions/checkout)
-
 jobs:
   build:
     runs-on: windows-latest
