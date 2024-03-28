@@ -1,8 +1,5 @@
-name: Build on Windows
-on:
-  push:
-   tags:
-     - '*crunchy'
+name: Build For UB-Tracking
+on: workflow_dispatch
 jobs:
   build:
     runs-on: windows-latest
