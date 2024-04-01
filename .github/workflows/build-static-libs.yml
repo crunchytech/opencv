@@ -1,4 +1,4 @@
-name: Build Static Libs (Release/x64) : core, imgproc, highgui
+name: Build Static Libs (Release/x64) core, imgproc, highgui
 
 on:
   push:
