@@ -50,18 +50,18 @@ jobs:
           dir "$Env:INSTALL_DIR\include"
           dir "$Env:INSTALL_DIR\lib"
 
-      # - name: Create Release Package (Zip)
-      #   run: |
-      #     Compress-Archive -Path "$Env:BUILD_DIR\lib\Release\*" -DestinationPath "opencv-static-$Env:BUILD_VER.zip"
+      - name: Create Release Package (Zip)
+        run: |
+          Compress-Archive -Path "$Env:INSTALL_DIR\*" -DestinationPath "opencv-static-$Env:BUILD_VER.zip"
 
-      # - name: Publish Release
-      #   run: |
-      #     gh release create "$Env:BUILD_VER" "opencv-static-$Env:BUILD_VER.zip"
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish Release
+        run: |
+          gh release create "$Env:BUILD_VER" "opencv-static-$Env:BUILD_VER.zip"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Remove Tag
-      #   run: |
-      #     git push --delete origin "$Env:GITHUB_REF_NAME"
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Remove Tag
+        run: |
+          git push --delete origin "$Env:GITHUB_REF_NAME"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
