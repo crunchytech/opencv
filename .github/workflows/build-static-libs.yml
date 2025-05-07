@@ -6,9 +6,11 @@ on:
       - build_*
 
 env:  
-  GITHUB_REF_NAME: ${{ github.ref_name }}
-  BUILD_DIR: build
-  INSTALL_DIR: install
+  GITHUB_REF_NAME:    ${{ github.ref_name }}
+  BuildDir:           build
+  InstallDir:         install
+  BuildPlatform:      x64
+  BuildConfiguration: release
 
 jobs:
   Build-Static-Libs:
@@ -18,7 +20,7 @@ jobs:
         run: |
           echo ("BUILD_VER=" + $Env:GITHUB_REF_NAME.replace('build_', '')) >> $Env:GITHUB_ENV
 
-      - name: Show Me
+      - name: Build Ver.
         run: |
           echo "$Env:BUILD_VER"
 
@@ -29,33 +31,33 @@ jobs:
 
       - name: Configure
         run: |
-          cmake -G "Visual Studio 17 2022" -A x64 -B "$Env:BUILD_DIR" -S "." -DCMAKE_INSTALL_PREFIX="$Env:INSTALL_DIR" -DBUILD_SHARED_LIBS=OFF -DWITH_ITT:BOOL="0" -DBUILD_opencv_java_bindings_generator:BOOL="0" -DWITH_OPENCL_D3D11_NV:BOOL="0" -DWITH_IPP:BOOL="0" -DCLAMDFFT_INCLUDE_DIR:PATH="CLAMDFFT_INCLUDE_DIR-NOTFOUND" -DWITH_JASPER:BOOL="0" -DCLAMDBLAS_INCLUDE_DIR:PATH="CLAMDBLAS_INCLUDE_DIR-NOTFOUND" -DBUILD_opencv_dnn:BOOL="0" -DBUILD_opencv_photo:BOOL="0" -DWITH_OPENCLAMDBLAS:BOOL="0" -DWITH_MSMF:BOOL="0" -DWITH_VTK:BOOL="0" -DBUILD_opencv_stitching:BOOL="0" -DWITH_PROTOBUF:BOOL="0" -DBUILD_opencv_ts:BOOL="0" -DWITH_LAPACK:BOOL="0" -DWITH_OBSENSOR:BOOL="0" -DBUILD_PERF_TESTS:BOOL="0" -Dthunder:BOOL="0" -DBUILD_ZLIB:BOOL="0" -DWITH_IMGCODEC_HDR:BOOL="0" -DWITH_GSTREAMER:BOOL="0" -DWITH_WEBP:BOOL="0" -Dccitt:BOOL="0" -DWITH_TIFF:BOOL="0" -DBUILD_opencv_python_bindings_generator:BOOL="0" -DOPENCV_DNN_OPENCL:BOOL="0" -DOPENCV_TEST_DNN_TFLITE:BOOL="0" -DBUILD_opencv_ml:BOOL="0" -DINSTALL_PDB:BOOL="0" -DBUILD_opencv_objdetect:BOOL="0" -DWITH_ARITH_ENC:BOOL="0" -DCLAMDFFT_ROOT_DIR:PATH="CLAMDFFT_ROOT_DIR-NOTFOUND" -DBUILD_opencv_js:BOOL="0" -DWITH_OPENCLAMDFFT:BOOL="0" -DWITH_IMGCODEC_PFM:BOOL="0" -DBUILD_opencv_js_bindings_generator:BOOL="0" -DBUILD_opencv_python_tests:BOOL="0" -DBUILD_WEBP:BOOL="0" -DCV_TRACE:BOOL="0" -Dpackbits:BOOL="0" -DWITH_IMGCODEC_PXM:BOOL="0" -DBUILD_LIST:STRING="" -DWITH_JPEG:BOOL="0" -DOPENCV_TIMESTAMP:STRING="2024-03-20T01:36:21Z" -DBUILD_JPEG:BOOL="0" -DWITH_ADE:BOOL="0" -DCMAKE_BUILD_TYPE:STRING="Release" -DBUILD_PNG:BOOL="0" -DWITH_EIGEN:BOOL="0" -DCLAMDBLAS_ROOT_DIR:PATH="CLAMDBLAS_ROOT_DIR-NOTFOUND" -DWITH_PNG:BOOL="0" -DWITH_QUIRC:BOOL="0" -DWITH_WIN32UI:BOOL="1" -DBUILD_TIFF:BOOL="0" -DBUILD_JAVA:BOOL="0" -DWITH_HALIDE:BOOL="0" -DBUILD_opencv_video:BOOL="1" -DBUILD_TESTS:BOOL="0" -DBUILD_opencv_flann:BOOL="0" -DWITH_FFMPEG:BOOL="0" -DBUILD_ITT:BOOL="0" -DWITH_FREETYPE:BOOL="0" -DBUILD_opencv_features2d:BOOL="0" -DBUILD_opencv_videoio:BOOL="0" -DBUILD_opencv_calib3d:BOOL="0" -DWITH_OPENJPEG:BOOL="0" -DWITH_ARITH_DEC:BOOL="0" -DBUILD_opencv_gapi:BOOL="0" -DWITH_FLATBUFFERS:BOOL="0" -DBUILD_PROTOBUF:BOOL="0" -DBUILD_opencv_apps:BOOL="0" -DBUILD_opencv_objc_bindings_generator:BOOL="0" -DWITH_OPENEXR:BOOL="0" -DBUILD_JASPER:BOOL="0" -DBUILD_OPENJPEG:BOOL="0" -DWITH_IMGCODEC_SUNRASTER:BOOL="0" -DWITH_MSMF_DXVA:BOOL="0"
+          cmake -G "Visual Studio 17 2022" -A ${{ env.BuildPlatform }} -B ${{ env.BuildDir }} -S "." -DCMAKE_INSTALL_PREFIX=${{ env.InstallDir }} -DBUILD_SHARED_LIBS=OFF -DWITH_ITT:BOOL="0" -DBUILD_opencv_java_bindings_generator:BOOL="0" -DWITH_OPENCL_D3D11_NV:BOOL="0" -DWITH_IPP:BOOL="0" -DCLAMDFFT_INCLUDE_DIR:PATH="CLAMDFFT_INCLUDE_DIR-NOTFOUND" -DWITH_JASPER:BOOL="0" -DCLAMDBLAS_INCLUDE_DIR:PATH="CLAMDBLAS_INCLUDE_DIR-NOTFOUND" -DBUILD_opencv_dnn:BOOL="0" -DBUILD_opencv_photo:BOOL="0" -DWITH_OPENCLAMDBLAS:BOOL="0" -DWITH_MSMF:BOOL="0" -DWITH_VTK:BOOL="0" -DBUILD_opencv_stitching:BOOL="0" -DWITH_PROTOBUF:BOOL="0" -DBUILD_opencv_ts:BOOL="0" -DWITH_LAPACK:BOOL="0" -DWITH_OBSENSOR:BOOL="0" -DBUILD_PERF_TESTS:BOOL="0" -Dthunder:BOOL="0" -DBUILD_ZLIB:BOOL="0" -DWITH_IMGCODEC_HDR:BOOL="0" -DWITH_GSTREAMER:BOOL="0" -DWITH_WEBP:BOOL="0" -Dccitt:BOOL="0" -DWITH_TIFF:BOOL="0" -DBUILD_opencv_python_bindings_generator:BOOL="0" -DOPENCV_DNN_OPENCL:BOOL="0" -DOPENCV_TEST_DNN_TFLITE:BOOL="0" -DBUILD_opencv_ml:BOOL="0" -DINSTALL_PDB:BOOL="0" -DBUILD_opencv_objdetect:BOOL="0" -DWITH_ARITH_ENC:BOOL="0" -DCLAMDFFT_ROOT_DIR:PATH="CLAMDFFT_ROOT_DIR-NOTFOUND" -DBUILD_opencv_js:BOOL="0" -DWITH_OPENCLAMDFFT:BOOL="0" -DWITH_IMGCODEC_PFM:BOOL="0" -DBUILD_opencv_js_bindings_generator:BOOL="0" -DBUILD_opencv_python_tests:BOOL="0" -DBUILD_WEBP:BOOL="0" -DCV_TRACE:BOOL="0" -Dpackbits:BOOL="0" -DWITH_IMGCODEC_PXM:BOOL="0" -DBUILD_LIST:STRING="" -DWITH_JPEG:BOOL="0" -DOPENCV_TIMESTAMP:STRING="2024-03-20T01:36:21Z" -DBUILD_JPEG:BOOL="0" -DWITH_ADE:BOOL="0" -DCMAKE_BUILD_TYPE:STRING="Release" -DBUILD_PNG:BOOL="0" -DWITH_EIGEN:BOOL="0" -DCLAMDBLAS_ROOT_DIR:PATH="CLAMDBLAS_ROOT_DIR-NOTFOUND" -DWITH_PNG:BOOL="0" -DWITH_QUIRC:BOOL="0" -DWITH_WIN32UI:BOOL="1" -DBUILD_TIFF:BOOL="0" -DBUILD_JAVA:BOOL="0" -DWITH_HALIDE:BOOL="0" -DBUILD_opencv_video:BOOL="1" -DBUILD_TESTS:BOOL="0" -DBUILD_opencv_flann:BOOL="0" -DWITH_FFMPEG:BOOL="0" -DBUILD_ITT:BOOL="0" -DWITH_FREETYPE:BOOL="0" -DBUILD_opencv_features2d:BOOL="0" -DBUILD_opencv_videoio:BOOL="0" -DBUILD_opencv_calib3d:BOOL="0" -DWITH_OPENJPEG:BOOL="0" -DWITH_ARITH_DEC:BOOL="0" -DBUILD_opencv_gapi:BOOL="0" -DWITH_FLATBUFFERS:BOOL="0" -DBUILD_PROTOBUF:BOOL="0" -DBUILD_opencv_apps:BOOL="0" -DBUILD_opencv_objc_bindings_generator:BOOL="0" -DWITH_OPENEXR:BOOL="0" -DBUILD_JASPER:BOOL="0" -DBUILD_OPENJPEG:BOOL="0" -DWITH_IMGCODEC_SUNRASTER:BOOL="0" -DWITH_MSMF_DXVA:BOOL="0"
 
       - name: Build
         run: |
-          cmake --build "$Env:BUILD_DIR" --target install --config Release
+          cmake --build ${{ env.BuildDir }} --target install --config ${{ env.BuildConfiguration }}
 
       - name: Clean Up Directory
         run: |
-          Get-ChildItem -Path "$Env:INSTALL_DIR" *.cmake -Recurse | foreach { Remove-Item -Path $_.FullName }
+          Get-ChildItem -Path ${{ env.InstallDir }} *.cmake -Recurse | foreach { Remove-Item -Path $_.FullName }
 
       - name: Rename 'staticlib' Directory To 'lib'
         run: |
-          Move-Item -Path "$Env:INSTALL_DIR\staticlib" -Destination "$Env:INSTALL_DIR\lib"
+          Move-Item -Path "${{ env.InstallDir }}\staticlib" -Destination "${{ env.InstallDir }}\lib"
 
       - name: List Files
         run: |
-          dir "$Env:INSTALL_DIR"
-          dir "$Env:INSTALL_DIR\include"
-          dir "$Env:INSTALL_DIR\lib"
+          dir "${{ env.InstallDir }}""
+          dir "${{ env.InstallDir }}\include"
+          dir "${{ env.InstallDir }}\lib"
 
       - name: Create Release Package (Zip)
         run: |
-          Compress-Archive -Path "$Env:INSTALL_DIR\*" -DestinationPath "opencv-static-$Env:BUILD_VER.zip"
+          Compress-Archive -Path "${{ env.InstallDir }}\*" -DestinationPath "opencv-static-libs-${{ env.BuildConfiguration }}.zip"
 
       - name: Publish Release
         run: |
-          gh release create "$Env:BUILD_VER" "opencv-static-$Env:BUILD_VER.zip"
+          gh release create "${{ env.BUILD_VER }}" "opencv-static-libs-${{ env.BuildConfiguration }}.zip"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
