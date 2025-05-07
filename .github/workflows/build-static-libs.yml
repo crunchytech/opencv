@@ -47,7 +47,7 @@ jobs:
 
       - name: List Files
         run: |
-          dir "${{ env.InstallDir }}""
+          dir "${{ env.InstallDir }}"
           dir "${{ env.InstallDir }}\include"
           dir "${{ env.InstallDir }}\lib"
 
