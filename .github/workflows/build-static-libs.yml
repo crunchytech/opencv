@@ -39,16 +39,11 @@ jobs:
         run: |
           Get-ChildItem -Path "$Env:INSTALL_DIR" *.cmake -Recurse | foreach { Remove-Item -Path $_.FullName }
 
-      - name: Move Library Directory
-        run: |
-          Move-Item -Path "$Env:INSTALL_DIR\x64\vc17\staticlib" -Destination "$Env:INSTALL_DIR\lib"
-          Remove-Item "$Env:INSTALL_DIR\x64" -Recurse
-
       - name: List Files
         run: |
           dir "$Env:INSTALL_DIR"
           dir "$Env:INSTALL_DIR\include"
-          dir "$Env:INSTALL_DIR\lib"
+          dir "$Env:INSTALL_DIR\staticlib"
 
       - name: Create Release Package (Zip)
         run: |
