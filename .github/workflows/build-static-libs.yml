@@ -39,11 +39,15 @@ jobs:
         run: |
           Get-ChildItem -Path "$Env:INSTALL_DIR" *.cmake -Recurse | foreach { Remove-Item -Path $_.FullName }
 
+      - name: Rename 'staticlib' Directory To 'lib'
+        run: |
+          Move-Item -Path "$Env:INSTALL_DIR\staticlib" -Destination "$Env:INSTALL_DIR\lib"
+
       - name: List Files
         run: |
           dir "$Env:INSTALL_DIR"
           dir "$Env:INSTALL_DIR\include"
-          dir "$Env:INSTALL_DIR\staticlib"
+          dir "$Env:INSTALL_DIR\lib"
 
       - name: Create Release Package (Zip)
         run: |
